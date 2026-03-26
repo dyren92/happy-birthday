@@ -1,120 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Happy Birthday!</title>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday Łukasz!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <style>
-        body {
-            margin: 0;
-            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-            background: linear-gradient(135deg, #f6d365, #fda085);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-        }
-        .card {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 16px;
-            max-width: 540px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            position: relative;
-        }
-        h1 {
-            font-size: 2.4rem;
-            margin-bottom: 10px;
-            color: #ff7a18;
-        }
-        h2 {
-            font-weight: normal;
-            margin-bottom: 25px;
-        }
-        p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 0.95rem;
-            color: #666;
-        }
-        .lang-switch {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ff7a18;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-    </style>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #333;
+    }
+
+    .card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 16px;
+      max-width: 520px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #ff6f61;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin: 12px 0;
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 0.95rem;
+      color: #777;
+    }
+
+    .lang-switch {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #ff6f61;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="card">
-        <button class="lang-switch" onclick="toggleLanguage()">PL</button>
+  <div class="card">
+    <button class="lang-switch" onclick="toggleLanguage()">PL</button>
 
-        <!-- ENGLISH -->
-        <div id="en">
-            <h1>🎉 Happy Birthday Łukasz! 🎉</h1>
-            <h2>Dear Colleague,</h2>
-            <p>
-                Wishing you a very happy birthday and a year ahead filled with
-                success, good health, and exciting opportunities.
-            </p>
-            <p>
-                Thank you for being such a great colleague — it’s a pleasure
-                working with you.
-            </p>
-            <div class="footer">
-                Best wishes,<br/>
-                Your Team
-            </div>
-        </div>
-
-        <!-- POLISH -->
-        <div id="pl" style="display:none;">
-            <h1>🎉 Wszystkiego najlepszego Łukasz! 🎉</h1>
-            <h2>Drogi Współpracowniku / Droga Współpracowniczko,</h2>
-            <p>
-                Z okazji urodzin życzymy Ci dużo zdrowia, sukcesów
-                oraz wielu powodów do uśmiechu w nadchodzącym roku.
-            </p>
-            <p>
-                Dziękujemy za świetną współpracę — to prawdziwa przyjemność
-                pracować razem z Tobą.
-            </p>
-            <div class="footer">
-                Najlepsze życzenia,<br/>
-                Twój Zespół
-            </div>
-        </div>
+    <!-- ENGLISH -->
+    <div id="en">
+      <h1>🎉 Happy Birthday, Łukasz! 🎉</h1>
+      <p>
+        Wishing you a wonderful birthday filled with happiness,
+        laughter, and great moments.
+      </p>
+      <p>
+        May the year ahead bring you success, good health,
+        and many reasons to smile.
+      </p>
+      <footer>
+        Best wishes,<br />
+        Diren😊
+      </footer>
     </div>
 
-    <script>
-        function toggleLanguage() {
-            const en = document.getElementById("en");
-            const pl = document.getElementById("pl");
-            const btn = document.querySelector(".lang-switch");
+    <!-- POLISH -->
+    <div id="pl" style="display:none;">
+      <h1>🎉 Wszystkiego najlepszego, Łukasz! 🎉</h1>
+      <p>
+        Z okazji urodzin życzę Ci dużo radości, uśmiechu
+        oraz samych wspaniałych chwil.
+      </p>
+      <p>
+        Niech nadchodzący rok przyniesie Ci sukcesy,
+        zdrowie i wiele powodów do dumy.
+      </p>
+      <footer>
+        Najlepsze życzenia,<br />
+        Diren😊
+      </footer>
+    </div>
+  </div>
 
-            if (en.style.display === "none") {
-                en.style.display = "block";
-                pl.style.display = "none";
-                btn.textContent = "PL";
-            } else {
-                en.style.display = "none";
-                pl.style.display = "block";
-                btn.textContent = "EN";
-            }
-        }
-    </script>
+  <script>
+    function toggleLanguage() {
+      const en = document.getElementById("en");
+      const pl = document.getElementById("pl");
+      const btn = document.querySelector(".lang-switch");
+
+      if (en.style.display === "none") {
+        en.style.display = "block";
+        pl.style.display = "none";
+        btn.textContent = "PL";
+      } else {
+        en.style.display = "none";
+        pl.style.display = "block";
+        btn.textContent = "EN";
+      }
+    }
+  </script>
 </body>
 </html>
