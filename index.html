@@ -147,47 +147,6 @@
         document.documentElement.lang = "pl";
       }
     }
-
-    const bgMusic = document.getElementById("bgMusic");
-    const musicBtn = document.getElementById("musicBtn");
-
-    function setMusicButtonState(isPlaying) {
-      musicBtn.textContent = isPlaying ? "⏸ Music" : "▶ Music";
-    }
-
-    async function tryAutoPlay() {
-      try {
-        // Try to start music automatically (may be blocked by browser policies).
-        await bgMusic.play();
-        setMusicButtonState(true);
-      } catch (e) {
-        // Autoplay with sound is commonly blocked until user interaction.
-        setMusicButtonState(false);
-      }
-    }
-
-    async function toggleMusic() {
-      try {
-        if (bgMusic.paused) {
-          await bgMusic.play();
-          setMusicButtonState(true);
-        } else {
-          bgMusic.pause();
-          setMusicButtonState(false);
-        }
-      } catch (e) {
-        // If play fails, user can click again after interacting with the page.
-        setMusicButtonState(false);
-      }
-    }
-
-    // Attempt autoplay on load (best effort).
-    window.addEventListener("load", tryAutoPlay);
-
-    // Extra: after ANY click anywhere, try again once (helps satisfy autoplay policies).
-    window.addEventListener("click", () => {
-      if (bgMusic.paused) tryAutoPlay();
-    }, { once: true });
     
 function play() {
   const audio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=");
