@@ -1,209 +1,80 @@
-from __future__ import print_function
-import time
-import sys
+import numpy as np
+import wave
 
-try:
-    import winsound
-except ImportError:
-    import os
+SAMPLE_RATE = 44100
 
-name = input("What is your name? ")
+def tone(freq_hz, duration_ms, volume=0.25):
+    """Generate a sine tone (or silence if freq_hz == 0)."""
+    duration_s = duration_ms / 1000.0
+    n = int(SAMPLE_RATE * duration_s)
+    t = np.linspace(0, duration_s, n, endpoint=False)
 
-print (" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-print ("		 A geeky birthday wish from a geeky friend!")
-print ("		 ==========================================")
-print ("		    Created By SujoyDatta")
-print ("          https://github.com/Sujoydatta26")
-print (" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-try:
-	winsound.Beep(264, 250)
-	sys.stdout.write('Ha')	
-	time.sleep(500/2000.0)
-	sys.stdout.write('ppy ')
-	winsound.Beep(264, 250)
-	time.sleep(250/2000.0)
-	sys.stdout.write('birth')
-	winsound.Beep(297, 1000)
-	time.sleep(250/2000.0)
-	sys.stdout.write('day ')
-	winsound.Beep(264, 1000)
-	time.sleep(250/2000.0)
-	sys.stdout.write('to ')
-	winsound.Beep(352, 1000)
-	time.sleep(250/2000.0)
-	print('you')
-	winsound.Beep(330, 2000)
-	time.sleep(500/2000.0)
+    if freq_hz == 0:
+        return np.zeros(n, dtype=np.float32)
 
-	sys.stdout.write('Ha')
-	winsound.Beep(264, 250)
-	time.sleep(500/2000.0)
-	sys.stdout.write('ppy ')
-	winsound.Beep(264, 250)
-	time.sleep(250/2000.0)
-	sys.stdout.write('birth')
-	winsound.Beep(297, 1000)
-	time.sleep(250/2000.0)
-	sys.stdout.write('day ')
-	winsound.Beep(264, 1000)
-	time.sleep(250/2000.0)
-	sys.stdout.write('to ')
-	winsound.Beep(396, 1000)
-	time.sleep(250/2000.0)
-	print('you')
-	winsound.Beep(352, 2000)
-	time.sleep(500/2000.0)
+    return (volume * np.sin(2 * np.pi * freq_hz * t)).astype(np.float32)
 
-	sys.stdout.write('Ha')
-	winsound.Beep(264, 250)
-	time.sleep(250/2000.0)
-	sys.stdout.write('ppy ')
-	winsound.Beep(264, 500)
-	time.sleep(250/1000.0)
-	sys.stdout.write('birth')
-	winsound.Beep(440, 1000)
-	time.sleep(250/2000.0)
-	sys.stdout.write('day ')
-	winsound.Beep(352, 1000)
-	time.sleep(250/2000.0)
-	sys.stdout.write('dear ')
-	winsound.Beep(330, 1000)
-	print(name)
-	time.sleep(250/2000.0)
-	winsound.Beep(297, 1000)
+def write_wav(filename, samples):
+    samples = np.clip(samples, -1.0, 1.0)
+    pcm16 = (samples * 32767).astype(np.int16)
 
-	winsound.Beep(440, 1000)
-	time.sleep(250/2000.0)
+    with wave.open(filename, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(SAMPLE_RATE)
+        wf.writeframes(pcm16.tobytes())
 
-	time.sleep(500/2000.0)
-	sys.stdout.write('Ha')
-	winsound.Beep(466, 250)
-	time.sleep(500/2000.0)
-	sys.stdout.write('ppy ')
-	winsound.Beep(466, 250)
-	time.sleep(250/2000.0)
-	sys.stdout.write('birth')
-	winsound.Beep(440, 1000)
-	time.sleep(250/2000.0)
-	sys.stdout.write('day ')
-	winsound.Beep(352, 1000)
-	time.sleep(250/2000.0)
-	sys.stdout.write('to ')
-	winsound.Beep(396, 1000)
-	time.sleep(250/2000.0)
-	print('you')
-	winsound.Beep(352, 2000)
-	time.sleep(250/2000.0)
-except:
-	os.system('beep -f 264 -l 250')
-	sys.stdout.write('Ha')
-	sys.stdout.flush()
-	time.sleep(500/2000.0)
-	sys.stdout.write('ppy ')
-	sys.stdout.flush()	
-	os.system('beep -f 264 -l 250')
-	time.sleep(250/2000.0)
-	sys.stdout.write('birth')
-	sys.stdout.flush()
-	os.system('beep -f 297 -l 1000')
-	time.sleep(250/2000.0)
-	sys.stdout.write('day ')
-	sys.stdout.flush()
-	os.system('beep -f 264 -l 1000')
-	time.sleep(250/2000.0)
-	sys.stdout.write('to ')
-	sys.stdout.flush()
-	os.system('beep -f 352 -l 1000')
-	time.sleep(250/2000.0)
-	print ('you')
-	os.system('beep -f 330 -l 2000')
-	time.sleep(500/2000.0)
-	
-	sys.stdout.write('Ha')
-	sys.stdout.flush()
-	os.system('beep -f 264 -l 250')
-	time.sleep(500/2000.0)
-	sys.stdout.write('ppy ')
-	sys.stdout.flush()
-	os.system('beep -f 264 -l 250')
-	time.sleep(250/2000.0)
-	sys.stdout.write('birth')
-	sys.stdout.flush()
-	os.system('beep -f 297 -l 1000')
-	time.sleep(250/2000.0)
-	sys.stdout.write('day ')
-	sys.stdout.flush()
-	os.system('beep -f 264 -l 1000')
-	time.sleep(250/2000.0)
-	sys.stdout.write('to ')
-	sys.stdout.flush()
-	os.system('beep -f 396 -l 1000')
-	time.sleep(250/2000.0)
-	print ('you')
-	os.system('beep -f 352 -l 2000')
-	time.sleep(500/2000.0)
-	
-	sys.stdout.write('Ha')
-	sys.stdout.flush()
-	os.system('beep -f 264 -l 250')
-	time.sleep(250/2000.0)
-	sys.stdout.write('ppy ')
-	sys.stdout.flush()
-	os.system('beep -f 264 -l 500')
-	time.sleep(250/1000.0)
-	sys.stdout.write('birth')
-	sys.stdout.flush()
-	os.system('beep -f 440 -l 1000')
-	time.sleep(250/2000.0)
-	sys.stdout.write('day ')
-	sys.stdout.flush()
-	os.system('beep -f 352 -l 1000')
-	time.sleep(250/2000.0)
-	sys.stdout.write('dear ')
-	sys.stdout.flush()
-	os.system('beep -f 330 -l 1000')
-	print (name)
-	time.sleep(250/2000.0)
-	os.system('beep -f 297 -l 1000')
-	
-	os.system('beep -f 440 -l 1000')
-	time.sleep(250/2000.0)
-	
-	time.sleep(500/2000.0)
-	sys.stdout.write('Ha')
-	sys.stdout.flush()
-	os.system('beep -f 466 -l 250')
-	time.sleep(500/2000.0)
-	sys.stdout.write('ppy ')
-	sys.stdout.flush()
-	os.system('beep -f 466 -l 250')
-	time.sleep(250/2000.0)
-	sys.stdout.write('birth')
-	sys.stdout.flush()
-	os.system('beep -f 440 -l 1000')
-	time.sleep(250/2000.0)
-	sys.stdout.write('day ')
-	sys.stdout.flush()
-	os.system('beep -f 352 -l 1000')
-	time.sleep(250/2000.0)
-	sys.stdout.write('to ')
-	sys.stdout.flush()
-	os.system('beep -f 396 -l 1000')
-	time.sleep(250/2000.0)
-	print ('you')
-	os.system('beep -f 352 -l 2000')
-	time.sleep(250/2000.0)
+# Helper: your code uses sleep fractions like 500/2000.0 = 0.25 sec
+def rest(seconds):
+    return tone(0, int(seconds * 1000))
 
-print ('HAPPY BIRTHDAY ' + name + ' <3 !!!')
+# ---- Melody rebuilt from your try: winsound.Beep(...) + sleep(...) ----
+parts = []
 
-print ("  --------------------------------------------------------------------------------------------------------")
+# 1) "Happy birthday to you"
+parts += [
+    tone(264, 250), rest(500/2000.0),
+    tone(264, 250), rest(250/2000.0),
+    tone(297, 1000), rest(250/2000.0),
+    tone(264, 1000), rest(250/2000.0),
+    tone(352, 1000), rest(250/2000.0),
+    tone(330, 2000), rest(500/2000.0),
+]
 
-print ("  | |  | |    /\    |  __ \ |  __ \ \ \   / / |  _ \|_   _||  __ \|__   __|| |  | ||  __ \    /\ \ \   / /")
+# 2) "Happy birthday to you"
+parts += [
+    tone(264, 250), rest(500/2000.0),
+    tone(264, 250), rest(250/2000.0),
+    tone(297, 1000), rest(250/2000.0),
+    tone(264, 1000), rest(250/2000.0),
+    tone(396, 1000), rest(250/2000.0),
+    tone(352, 2000), rest(500/2000.0),
+]
 
-print ("  | |__| |   /  \   | |__) || |__) | \ \_/ /  | |_) | | |  | |__) |  | |   | |__| || |  | |  /  \ \ \_/ /  ")
+# 3) "Happy birthday dear <name>"
+parts += [
+    tone(264, 250), rest(250/2000.0),
+    tone(264, 500), rest(250/1000.0),
+    tone(440, 1000), rest(250/2000.0),
+    tone(352, 1000), rest(250/2000.0),
+    tone(330, 1000), rest(250/2000.0),
+    tone(297, 1000),                      # after printing name
+    tone(440, 1000), rest(250/2000.0),
+    rest(500/2000.0),
+]
 
-print ("  |  __  |  / /\ \  |  ___/ |  ___/   \   /   |  _ <  | |  |  _  /   | |   |  __  || |  | | / /\ \ \   /  ")
+# 4) "Happy birthday to you"
+parts += [
+    tone(466, 250), rest(500/2000.0),
+    tone(466, 250), rest(250/2000.0),
+    tone(440, 1000), rest(250/2000.0),
+    tone(352, 1000), rest(250/2000.0),
+    tone(396, 1000), rest(250/2000.0),
+    tone(352, 2000), rest(250/2000.0),
+]
 
-print ("  | |  | | / ____ \ | |     | |        | |    | |_) |_| |_ | | \ \   | |   | |  | || |__| |/ ____ \ | |   ")
+audio = np.concatenate(parts)
+write_wav("music.wav", audio)
 
-print ("  |_|  |_|/_/    \_\|_|     |_|        |_|    |____/|_____||_|  \_\  |_|   |_|  |_||_____//_/    \_\|_|   ")
+print("✅ Created music.wav — upload this to your GitHub Pages repo.")
+``
