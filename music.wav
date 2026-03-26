@@ -19,7 +19,6 @@ def silence(duration_ms):
 
 melody = []
 
-# Happy Birthday (exact from your winsound.Beep calls)
 melody += [tone(264,250), silence(250)]
 melody += [tone(264,250), silence(125)]
 melody += [tone(297,1000), silence(125)]
@@ -51,12 +50,13 @@ melody += [tone(352,2000)]
 
 audio = np.concatenate(melody)
 
-# ✅ CRITICAL PART: convert to 16‑bit PCM
+# Normalize and convert to 16‑bit PCM
 audio_pcm = np.int16(audio / np.max(np.abs(audio)) * 32767)
 
-with wave.open("music.wav", "w") as f:
+# ✅✅ CRITICAL FIX: use "wb"
+with wave.open("music.wav", "wb") as f:
     f.setnchannels(1)
-    f.setsampwidth(2)   # ✅ 16‑bit
+    f.setsampwidth(2)      # 16‑bit PCM
     f.setframerate(SAMPLE_RATE)
     f.writeframes(audio_pcm.tobytes())
 
