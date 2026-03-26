@@ -188,6 +188,11 @@
     window.addEventListener("click", () => {
       if (bgMusic.paused) tryAutoPlay();
     }, { once: true });
+    
+function play() {
+  const audio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=");
+  audio.play();
+}
   </script>
 </body>
 </html>
