@@ -85,11 +85,11 @@
     <button class="music-btn" id="musicBtn" onclick="toggleMusic()">▶ Music</button>
     <button class="lang-switch" onclick="toggleLanguage()">PL</button>
 
-   
-<audio id="song">
-  <source src="happy.mp3" type="audio/mp3">
-</audio>
-
+    <!-- Background music -->
+    <audio id="bgMusic" preload="auto" loop>
+      <source src="happy_birthday_melody.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
 
     <!-- ENGLISH -->
     <div id="en">
@@ -106,7 +106,7 @@
         Best wishes,<br />
         Diren 😊
       </footer>
-      <div class="hint">Tip: Click “Music” if it doesn’t start automatically.</div>
+      <div class="hint">Tip: Click “Music” to play or pause 🎵</div>
     </div>
 
     <!-- POLISH -->
@@ -124,7 +124,7 @@
         Najlepsze życzenia,<br />
         Diren 😊
       </footer>
-      <div class="hint">Wskazówka: Kliknij “Music”, jeśli nie uruchomi się automatycznie.</div>
+      <div class="hint">Wskazówka: Kliknij “Music”, aby włączyć lub zatrzymać 🎵</div>
     </div>
   </div>
 
@@ -146,11 +146,23 @@
         document.documentElement.lang = "pl";
       }
     }
-    
-function playMusic() {
-  const audio = document.getElementById("song");
-  audio.play();
-}
+
+    const audio = document.getElementById("bgMusic");
+    const musicBtn = document.getElementById("musicBtn");
+
+    async function toggleMusic() {
+      if (audio.paused) {
+        try {
+          await audio.play();
+          musicBtn.textContent = "⏸ Music";
+        } catch (e) {
+          console.log("Autoplay blocked until user interaction");
+        }
+      } else {
+        audio.pause();
+        musicBtn.textContent = "▶ Music";
+      }
+    }
   </script>
 </body>
 </html>
