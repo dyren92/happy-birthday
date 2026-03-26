@@ -1,17 +1,70 @@
+import wave
+import math
+from array import array
+
+SAMPLE_RATE = 44100
+VOLUME = 0.8
+
 def tone(freq, duration_ms):
     frames = int(SAMPLE_RATE * duration_ms / 1000)
-    data = bytearray()
+    data = array('h')
 
     for i in range(frames):
-        if freq == 0:
-            sample = 0
-        else:
-            sample = int(
-                VOLUME * 32767 *
-                math.sin(2 * math.pi * freq * (i / SAMPLE_RATE))
-            )
-            sample = max(-32768, min(32767, sample))
+        sample = int(
+            VOLUME * 32767 *
+            math.sin(2 * math.pi * freq * i / SAMPLE_RATE)
+        )
+        data.append(sample)
 
-        data.extend(struct.pack('<h', sample))
+    return data
 
-    return bytes(data)
+def silence(duration_ms):
+    frames = int(SAMPLE_RATE * duration_ms / 1000)
+    return array('h', [0] * frames)
+
+audio = array('h')
+
+# 🎂 Happy Birthday (clean timing)
+notes = [
+    (264,250),(0,100),
+    (264,250),(0,100),
+    (297,500),(0,100),
+    (264,500),(0,100),
+    (352,500),(0,100),
+    (330,1000),(0,200),
+
+    (264,250),(0,100),
+    (264,250),(0,100),
+    (297,500),(0,100),
+    (264,500),(0,100),
+    (396,500),(0,100),
+    (352,1000),(0,200),
+
+    (264,250),(0,100),
+    (264,250),(0,100),
+    (440,500),(0,100),
+    (352,500),(0,100),
+    (330,500),(0,100),
+    (297,1000),(0,200),
+
+    (466,250),(0,100),
+    (466,250),(0,100),
+    (440,500),(0,100),
+    (352,500),(0,100),
+    (396,500),(0,100),
+    (352,1200)
+]
+
+for freq, dur in notes:
+    if freq == 0:
+        audio.extend(silence(dur))
+    else:
+        audio.extend(tone(freq, dur))
+
+with wave.open("happy.wav", "wb") as f:
+    f.setnchannels(1)
+    f.setsampwidth(2)
+    f.setframerate(SAMPLE_RATE)
+    f.writeframes(audio.tobytes())
+
+print("✅ happy.wav created")
