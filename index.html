@@ -57,12 +57,40 @@
       cursor: pointer;
       font-size: 0.9rem;
     }
+
+    .music-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #333;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      opacity: 0.92;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #999;
+    }
   </style>
 </head>
 
 <body>
   <div class="card">
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">▶ Music</button>
     <button class="lang-switch" onclick="toggleLanguage()">PL</button>
+
+    <!-- Background music (hidden controls). Loop enabled. -->
+    <!-- Replace "music.mp3" with your file name or URL -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="music.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
 
     <!-- ENGLISH -->
     <div id="en">
@@ -77,8 +105,9 @@
       </p>
       <footer>
         Best wishes,<br />
-        Diren😊
+        Diren 😊
       </footer>
+      <div class="hint">Tip: Click “Music” if it doesn’t start automatically.</div>
     </div>
 
     <!-- POLISH -->
@@ -94,8 +123,9 @@
       </p>
       <footer>
         Najlepsze życzenia,<br />
-        Diren😊
+        Diren 😊
       </footer>
+      <div class="hint">Wskazówka: Kliknij “Music”, jeśli nie uruchomi się automatycznie.</div>
     </div>
   </div>
 
@@ -109,12 +139,55 @@
         en.style.display = "block";
         pl.style.display = "none";
         btn.textContent = "PL";
+        document.documentElement.lang = "en";
       } else {
         en.style.display = "none";
         pl.style.display = "block";
         btn.textContent = "EN";
+        document.documentElement.lang = "pl";
       }
     }
+
+    const bgMusic = document.getElementById("bgMusic");
+    const musicBtn = document.getElementById("musicBtn");
+
+    function setMusicButtonState(isPlaying) {
+      musicBtn.textContent = isPlaying ? "⏸ Music" : "▶ Music";
+    }
+
+    async function tryAutoPlay() {
+      try {
+        // Try to start music automatically (may be blocked by browser policies).
+        await bgMusic.play();
+        setMusicButtonState(true);
+      } catch (e) {
+        // Autoplay with sound is commonly blocked until user interaction.
+        setMusicButtonState(false);
+      }
+    }
+
+    async function toggleMusic() {
+      try {
+        if (bgMusic.paused) {
+          await bgMusic.play();
+          setMusicButtonState(true);
+        } else {
+          bgMusic.pause();
+          setMusicButtonState(false);
+        }
+      } catch (e) {
+        // If play fails, user can click again after interacting with the page.
+        setMusicButtonState(false);
+      }
+    }
+
+    // Attempt autoplay on load (best effort).
+    window.addEventListener("load", tryAutoPlay);
+
+    // Extra: after ANY click anywhere, try again once (helps satisfy autoplay policies).
+    window.addEventListener("click", () => {
+      if (bgMusic.paused) tryAutoPlay();
+    }, { once: true });
   </script>
 </body>
 </html>
