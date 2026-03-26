@@ -1,0 +1,80 @@
+import numpy as np
+import wave
+
+SAMPLE_RATE = 44100
+
+def tone(freq_hz, duration_ms, volume=0.25):
+    """Generate a sine tone (or silence if freq_hz == 0)."""
+    duration_s = duration_ms / 1000.0
+    n = int(SAMPLE_RATE * duration_s)
+    t = np.linspace(0, duration_s, n, endpoint=False)
+
+    if freq_hz == 0:
+        return np.zeros(n, dtype=np.float32)
+
+    return (volume * np.sin(2 * np.pi * freq_hz * t)).astype(np.float32)
+
+def write_wav(filename, samples):
+    samples = np.clip(samples, -1.0, 1.0)
+    pcm16 = (samples * 32767).astype(np.int16)
+
+    with wave.open(filename, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(SAMPLE_RATE)
+        wf.writeframes(pcm16.tobytes())
+
+# Helper: your code uses sleep fractions like 500/2000.0 = 0.25 sec
+def rest(seconds):
+    return tone(0, int(seconds * 1000))
+
+# ---- Melody rebuilt from your try: winsound.Beep(...) + sleep(...) ----
+parts = []
+
+# 1) "Happy birthday to you"
+parts += [
+    tone(264, 250), rest(500/2000.0),
+    tone(264, 250), rest(250/2000.0),
+    tone(297, 1000), rest(250/2000.0),
+    tone(264, 1000), rest(250/2000.0),
+    tone(352, 1000), rest(250/2000.0),
+    tone(330, 2000), rest(500/2000.0),
+]
+
+# 2) "Happy birthday to you"
+parts += [
+    tone(264, 250), rest(500/2000.0),
+    tone(264, 250), rest(250/2000.0),
+    tone(297, 1000), rest(250/2000.0),
+    tone(264, 1000), rest(250/2000.0),
+    tone(396, 1000), rest(250/2000.0),
+    tone(352, 2000), rest(500/2000.0),
+]
+
+# 3) "Happy birthday dear <name>"
+parts += [
+    tone(264, 250), rest(250/2000.0),
+    tone(264, 500), rest(250/1000.0),
+    tone(440, 1000), rest(250/2000.0),
+    tone(352, 1000), rest(250/2000.0),
+    tone(330, 1000), rest(250/2000.0),
+    tone(297, 1000),                      # after printing name
+    tone(440, 1000), rest(250/2000.0),
+    rest(500/2000.0),
+]
+
+# 4) "Happy birthday to you"
+parts += [
+    tone(466, 250), rest(500/2000.0),
+    tone(466, 250), rest(250/2000.0),
+    tone(440, 1000), rest(250/2000.0),
+    tone(352, 1000), rest(250/2000.0),
+    tone(396, 1000), rest(250/2000.0),
+    tone(352, 2000), rest(250/2000.0),
+]
+
+audio = np.concatenate(parts)
+write_wav("music.wav", audio)
+
+print("✅ Created music.wav — upload this to your GitHub Pages repo.")
+``
