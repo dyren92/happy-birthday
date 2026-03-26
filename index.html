@@ -86,8 +86,8 @@
     <button class="lang-switch" onclick="toggleLanguage()">PL</button>
 
    
-<audio id="bgMusic" loop preload="auto">
-  <source src="music-fixed.wav" type="audio/wav">
+<audio id="song" loop preload="auto">
+  <source src="happy.wav" type="audio/wav">
   Your browser does not support the audio element.
 </audio>
 
@@ -148,8 +148,8 @@
       }
     }
     
-function play() {
-  const audio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=");
+function playMusic() {
+  const audio = document.getElementById("song");
   audio.play();
 }
   </script>
