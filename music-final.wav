@@ -1,13 +1,6 @@
-import wave
-import struct
-import math
-
-SAMPLE_RATE = 44100
-VOLUME = 0.3  # 0.0 – 1.0
-
 def tone(freq, duration_ms):
     frames = int(SAMPLE_RATE * duration_ms / 1000)
-    data = []
+    data = bytearray()
 
     for i in range(frames):
         if freq == 0:
@@ -17,50 +10,8 @@ def tone(freq, duration_ms):
                 VOLUME * 32767 *
                 math.sin(2 * math.pi * freq * (i / SAMPLE_RATE))
             )
-        data.append(struct.pack('<h', sample))
+            sample = max(-32768, min(32767, sample))
 
-    return b''.join(data)
+        data.extend(struct.pack('<h', sample))
 
-def silence(duration_ms):
-    frames = int(SAMPLE_RATE * duration_ms / 1000)
-    return b'\x00\x00' * frames
-
-audio = b''
-
-# Happy Birthday melody (from your winsound.Beep code)
-audio += tone(264,250) + silence(250)
-audio += tone(264,250) + silence(125)
-audio += tone(297,1000) + silence(125)
-audio += tone(264,1000) + silence(125)
-audio += tone(352,1000) + silence(125)
-audio += tone(330,2000) + silence(250)
-
-audio += tone(264,250) + silence(250)
-audio += tone(264,250) + silence(125)
-audio += tone(297,1000) + silence(125)
-audio += tone(264,1000) + silence(125)
-audio += tone(396,1000) + silence(125)
-audio += tone(352,2000) + silence(250)
-
-audio += tone(264,250) + silence(125)
-audio += tone(264,500) + silence(250)
-audio += tone(440,1000) + silence(125)
-audio += tone(352,1000) + silence(125)
-audio += tone(330,1000) + silence(125)
-audio += tone(297,1000)
-audio += tone(440,1000) + silence(250)
-
-audio += tone(466,250) + silence(250)
-audio += tone(466,250) + silence(125)
-audio += tone(440,1000) + silence(125)
-audio += tone(352,1000) + silence(125)
-audio += tone(396,1000) + silence(125)
-audio += tone(352,2000)
-
-with wave.open("music-final.wav", "wb") as f:
-    f.setnchannels(1)
-    f.setsampwidth(2)      # 16‑bit PCM
-    f.setframerate(SAMPLE_RATE)
-    f.writeframes(audio)
-
-print("✅ music-final.wav created")
+    return bytes(data)
