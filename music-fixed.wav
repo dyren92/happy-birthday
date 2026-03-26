@@ -1,63 +1,66 @@
-import numpy as np
 import wave
+import struct
+import math
 
 SAMPLE_RATE = 44100
+VOLUME = 0.3  # 0.0 – 1.0
 
-def tone(freq, duration_ms, volume=0.3):
-    length = int(SAMPLE_RATE * duration_ms / 1000)
-    t = np.linspace(0, duration_ms / 1000, length, False)
+def tone(freq, duration_ms):
+    frames = int(SAMPLE_RATE * duration_ms / 1000)
+    data = []
 
-    if freq == 0:
-        signal = np.zeros(length)
-    else:
-        signal = volume * np.sin(2 * np.pi * freq * t)
+    for i in range(frames):
+        if freq == 0:
+            sample = 0
+        else:
+            sample = int(
+                VOLUME * 32767 *
+                math.sin(2 * math.pi * freq * (i / SAMPLE_RATE))
+            )
+        data.append(struct.pack('<h', sample))
 
-    return signal
+    return b''.join(data)
 
 def silence(duration_ms):
-    return np.zeros(int(SAMPLE_RATE * duration_ms / 1000))
+    frames = int(SAMPLE_RATE * duration_ms / 1000)
+    return b'\x00\x00' * frames
 
-melody = []
+audio = b''
 
-melody += [tone(264,250), silence(250)]
-melody += [tone(264,250), silence(125)]
-melody += [tone(297,1000), silence(125)]
-melody += [tone(264,1000), silence(125)]
-melody += [tone(352,1000), silence(125)]
-melody += [tone(330,2000), silence(250)]
+# Happy Birthday melody (from your winsound.Beep code)
+audio += tone(264,250) + silence(250)
+audio += tone(264,250) + silence(125)
+audio += tone(297,1000) + silence(125)
+audio += tone(264,1000) + silence(125)
+audio += tone(352,1000) + silence(125)
+audio += tone(330,2000) + silence(250)
 
-melody += [tone(264,250), silence(250)]
-melody += [tone(264,250), silence(125)]
-melody += [tone(297,1000), silence(125)]
-melody += [tone(264,1000), silence(125)]
-melody += [tone(396,1000), silence(125)]
-melody += [tone(352,2000), silence(250)]
+audio += tone(264,250) + silence(250)
+audio += tone(264,250) + silence(125)
+audio += tone(297,1000) + silence(125)
+audio += tone(264,1000) + silence(125)
+audio += tone(396,1000) + silence(125)
+audio += tone(352,2000) + silence(250)
 
-melody += [tone(264,250), silence(125)]
-melody += [tone(264,500), silence(250)]
-melody += [tone(440,1000), silence(125)]
-melody += [tone(352,1000), silence(125)]
-melody += [tone(330,1000), silence(125)]
-melody += [tone(297,1000)]
-melody += [tone(440,1000), silence(250)]
+audio += tone(264,250) + silence(125)
+audio += tone(264,500) + silence(250)
+audio += tone(440,1000) + silence(125)
+audio += tone(352,1000) + silence(125)
+audio += tone(330,1000) + silence(125)
+audio += tone(297,1000)
+audio += tone(440,1000) + silence(250)
 
-melody += [tone(466,250), silence(250)]
-melody += [tone(466,250), silence(125)]
-melody += [tone(440,1000), silence(125)]
-melody += [tone(352,1000), silence(125)]
-melody += [tone(396,1000), silence(125)]
-melody += [tone(352,2000)]
+audio += tone(466,250) + silence(250)
+audio += tone(466,250) + silence(125)
+audio += tone(440,1000) + silence(125)
+audio += tone(352,1000) + silence(125)
+audio += tone(396,1000) + silence(125)
+audio += tone(352,2000)
 
-audio = np.concatenate(melody)
-
-# Normalize and convert to 16‑bit PCM
-audio_pcm = np.int16(audio / np.max(np.abs(audio)) * 32767)
-
-# ✅✅ CRITICAL FIX: use "wb"
-with wave.open("music.wav", "wb") as f:
+with wave.open("music-final.wav", "wb") as f:
     f.setnchannels(1)
     f.setsampwidth(2)      # 16‑bit PCM
     f.setframerate(SAMPLE_RATE)
-    f.writeframes(audio_pcm.tobytes())
+    f.writeframes(audio)
 
-print("✅ Browser‑compatible music.wav created")
+print("✅ music-final.wav created")
